@@ -22,6 +22,11 @@
                 </ul>
                 <h4 class="text-right">Total: R$ <span id="total-price">0,00</span></h4>
             </div>
+            <div class="card-footer text-center">
+                <button id="finalize-purchase" class="btn btn-success btn-block btn-sm">Finalizar Compra</button>
+                <button id="clear-cart" class="btn btn-danger btn-block btn-sm mt-2">Esvaziar Sacola</button>
+                <a href="index.html" class="btn btn-secondary btn-block btn-sm mt-2">Voltar ao Cardápio</a>
+            </div>
         </div>
         
         <!-- Formulário de informações -->
@@ -48,25 +53,20 @@
                             <option value="PIX">PIX</option>
                         </select>
                     </div>
-                                <div class="card-footer text-center">
-                <button id="finalize-purchase" class="btn btn-success btn-block btn-sm">Finalizar Compra</button>
-                <button id="clear-cart" class="btn btn-danger btn-block btn-sm mt-2">Esvaziar Sacola</button>
-                <a href="index.html" class="btn btn-secondary btn-block btn-sm mt-2">Voltar ao Cardápio</a>
-            </div>
-                    <button type="submit" class="btn btn-primary btn-block">Salvar Informações</button>
+                    <button type="submit" class="btn btn-primary btn-block">Preencher Informações</button>
                 </form>
             </div>
         </div>
         
-        <!-- Informações salvas -->
-        <div class="card shadow mt-4 d-none" id="saved-info-card">
+        <!-- Informações de envio para o WhatsApp -->
+        <div class="card shadow mt-4 d-none" id="whatsapp-info-card">
             <div class="card-header bg-success text-white">
-                <h3 class="text-center">Informações Salvas</h3>
+                <h3 class="text-center">Informações para Enviar no WhatsApp</h3>
             </div>
             <div class="card-body">
-                <p><strong>Endereço:</strong> <span id="saved-address"></span></p>
-                <p><strong>Telefone:</strong> <span id="saved-phone"></span></p>
-                <p><strong>Forma de Pagamento:</strong> <span id="saved-payment-method"></span></p>
+                <p><strong>Endereço:</strong> <span id="whatsapp-address"></span></p>
+                <p><strong>Telefone:</strong> <span id="whatsapp-phone"></span></p>
+                <p><strong>Forma de Pagamento:</strong> <span id="whatsapp-payment-method"></span></p>
             </div>
             <div class="card-footer text-center">
                 <a id="whatsapp-link" class="btn btn-success btn-block" target="_blank">Enviar para o WhatsApp</a>
@@ -80,7 +80,7 @@
             const cartItemsContainer = document.getElementById('cart-items');
             const totalPriceElement = document.getElementById('total-price');
             const form = document.getElementById('info-form');
-            const savedInfoCard = document.getElementById('saved-info-card');
+            const whatsappInfoCard = document.getElementById('whatsapp-info-card');
             const whatsappLink = document.getElementById('whatsapp-link');
 
             // Atualiza a exibição da sacola
@@ -132,7 +132,7 @@
                 }
             });
 
-            // Salvar informações do formulário
+            // Preencher informações e gerar link para o WhatsApp
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
 
@@ -140,36 +140,26 @@
                 const phone = document.getElementById('phone').value;
                 const paymentMethod = document.getElementById('payment-method').value;
 
-                localStorage.setItem('userInfo', JSON.stringify({ address, phone, paymentMethod }));
-
-                displaySavedInfo();
-                form.reset();
-                alert('Informações salvas com sucesso!');
-            });
-
-            // Exibir informações salvas
-            function displaySavedInfo() {
-                const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-                if (userInfo) {
-                    document.getElementById('saved-address').textContent = userInfo.address;
-                    document.getElementById('saved-phone').textContent = userInfo.phone;
-                    document.getElementById('saved-payment-method').textContent = userInfo.paymentMethod;
-                    savedInfoCard.classList.remove('d-none');
-                    updateWhatsAppLink(userInfo);
+                if (!address || !phone || !paymentMethod) {
+                    alert('Por favor, preencha todas as informações!');
+                    return;
                 }
-            }
 
-            // Atualizar link do WhatsApp
-            function updateWhatsAppLink(userInfo) {
+                // Exibir as informações para o WhatsApp
+                document.getElementById('whatsapp-address').textContent = address;
+                document.getElementById('whatsapp-phone').textContent = phone;
+                document.getElementById('whatsapp-payment-method').textContent = paymentMethod;
+                whatsappInfoCard.classList.remove('d-none');
+
+                // Gerar o link do WhatsApp com as informações
                 const cartItems = Object.entries(cart).map(([item, details]) => `${item} - ${details.quantity}x R$ ${details.price.toFixed(2)}`).join(', ');
                 const total = Object.values(cart).reduce((sum, details) => sum + details.price * details.quantity, 0).toFixed(2);
-                const message = `Pedido:\n${cartItems}\nTotal: R$ ${total}\nEndereço: ${userInfo.address}\nTelefone: ${userInfo.phone}\nForma de Pagamento: ${userInfo.paymentMethod}`;
+                const message = `Pedido:\n${cartItems}\nTotal: R$ ${total}\nEndereço: ${address}\nTelefone: ${phone}\nForma de Pagamento: ${paymentMethod}`;
                 whatsappLink.href = `https://wa.me/5512988030108?text=${encodeURIComponent(message)}`;
-            }
+            });
 
             // Atualizar a exibição ao carregar a página
             updateCartDisplay();
-            displaySavedInfo();
         });
     </script>
 </body>
