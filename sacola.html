@@ -22,11 +22,6 @@
                 </ul>
                 <h4 class="text-right">Total: R$ <span id="total-price">0,00</span></h4>
             </div>
-            <div class="card-footer text-center">
-                <button id="finalize-purchase" class="btn btn-success btn-block btn-sm">Finalizar Compra</button>
-                <button id="clear-cart" class="btn btn-danger btn-block btn-sm mt-2">Esvaziar Sacola</button>
-                <a href="index.html" class="btn btn-secondary btn-block btn-sm mt-2">Voltar ao Cardápio</a>
-            </div>
         </div>
         
         <!-- Formulário de informações -->
@@ -53,24 +48,14 @@
                             <option value="PIX">PIX</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Preencher Informações</button>
+                    <button type="submit" class="btn btn-primary btn-block">Enviar Informações</button>
                 </form>
             </div>
         </div>
-        
-        <!-- Informações de envio para o WhatsApp -->
-        <div class="card shadow mt-4 d-none" id="whatsapp-info-card">
-            <div class="card-header bg-success text-white">
-                <h3 class="text-center">Informações para Enviar no WhatsApp</h3>
-            </div>
-            <div class="card-body">
-                <p><strong>Endereço:</strong> <span id="whatsapp-address"></span></p>
-                <p><strong>Telefone:</strong> <span id="whatsapp-phone"></span></p>
-                <p><strong>Forma de Pagamento:</strong> <span id="whatsapp-payment-method"></span></p>
-            </div>
-            <div class="card-footer text-center">
-                <a id="whatsapp-link" class="btn btn-success btn-block" target="_blank">Enviar para o WhatsApp</a>
-            </div>
+
+        <!-- Botão para enviar ao WhatsApp -->
+        <div class="card-footer text-center mt-3">
+            <a id="whatsapp-link" class="btn btn-success btn-block" target="_blank" style="display: none;">Enviar para o WhatsApp</a>
         </div>
     </div>
 
@@ -80,7 +65,6 @@
             const cartItemsContainer = document.getElementById('cart-items');
             const totalPriceElement = document.getElementById('total-price');
             const form = document.getElementById('info-form');
-            const whatsappInfoCard = document.getElementById('whatsapp-info-card');
             const whatsappLink = document.getElementById('whatsapp-link');
 
             // Atualiza a exibição da sacola
@@ -91,7 +75,7 @@
                 for (const [item, details] of Object.entries(cart)) {
                     const listItem = document.createElement('li');
                     listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
-                    listItem.innerHTML = ` 
+                    listItem.innerHTML = `
                         <span>
                             <strong>${item}</strong> - R$ ${details.price.toFixed(2)} x ${details.quantity}
                         </span>
@@ -105,13 +89,9 @@
                 totalPriceElement.textContent = total.toFixed(2);
             }
 
-            // Obter e salvar dados no localStorage
+            // Obter itens do localStorage
             function getCart() {
                 return JSON.parse(localStorage.getItem('cart')) || {};
-            }
-
-            function setCart(cart) {
-                localStorage.setItem('cart', JSON.stringify(cart));
             }
 
             // Esvaziar sacola
@@ -145,17 +125,14 @@
                     return;
                 }
 
-                // Exibir as informações para o WhatsApp
-                document.getElementById('whatsapp-address').textContent = address;
-                document.getElementById('whatsapp-phone').textContent = phone;
-                document.getElementById('whatsapp-payment-method').textContent = paymentMethod;
-                whatsappInfoCard.classList.remove('d-none');
-
                 // Gerar o link do WhatsApp com as informações
                 const cartItems = Object.entries(cart).map(([item, details]) => `${item} - ${details.quantity}x R$ ${details.price.toFixed(2)}`).join(', ');
                 const total = Object.values(cart).reduce((sum, details) => sum + details.price * details.quantity, 0).toFixed(2);
                 const message = `Pedido:\n${cartItems}\nTotal: R$ ${total}\nEndereço: ${address}\nTelefone: ${phone}\nForma de Pagamento: ${paymentMethod}`;
                 whatsappLink.href = `https://wa.me/5512988030108?text=${encodeURIComponent(message)}`;
+                whatsappLink.style.display = 'block';
+
+                alert('Informações prontas para envio via WhatsApp!');
             });
 
             // Atualizar a exibição ao carregar a página
