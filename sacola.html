@@ -48,14 +48,14 @@
                             <option value="PIX">PIX</option>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Enviar Informações</button>
+                    <button type="submit" class="btn btn-primary btn-block">Gerar Pedido</button>
                 </form>
             </div>
-        </div>
 
-        <!-- Botão para enviar ao WhatsApp -->
-        <div class="card-footer text-center mt-3">
-            <a id="whatsapp-link" class="btn btn-success btn-block" target="_blank" style="display: none;">Enviar para o WhatsApp</a>
+            <!-- Botão para WhatsApp -->
+            <div class="card-footer text-center">
+                <a id="whatsapp-link" class="btn btn-success btn-block d-none" target="_blank">Enviar para o WhatsApp</a>
+            </div>
         </div>
     </div>
 
@@ -75,7 +75,7 @@
                 for (const [item, details] of Object.entries(cart)) {
                     const listItem = document.createElement('li');
                     listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
-                    listItem.innerHTML = `
+                    listItem.innerHTML = ` 
                         <span>
                             <strong>${item}</strong> - R$ ${details.price.toFixed(2)} x ${details.quantity}
                         </span>
@@ -89,28 +89,10 @@
                 totalPriceElement.textContent = total.toFixed(2);
             }
 
-            // Obter itens do localStorage
+            // Obter e salvar dados no localStorage
             function getCart() {
                 return JSON.parse(localStorage.getItem('cart')) || {};
             }
-
-            // Esvaziar sacola
-            document.getElementById('clear-cart').addEventListener('click', () => {
-                localStorage.removeItem('cart');
-                alert('Sacola esvaziada!');
-                location.reload();
-            });
-
-            // Finalizar compra
-            document.getElementById('finalize-purchase').addEventListener('click', () => {
-                if (Object.keys(cart).length === 0) {
-                    alert('Sua sacola está vazia!');
-                } else {
-                    alert('Compra finalizada! Obrigado por escolher nossa Costelaria e Assados 399.');
-                    localStorage.removeItem('cart');
-                    location.reload();
-                }
-            });
 
             // Preencher informações e gerar link para o WhatsApp
             form.addEventListener('submit', (e) => {
@@ -130,9 +112,9 @@
                 const total = Object.values(cart).reduce((sum, details) => sum + details.price * details.quantity, 0).toFixed(2);
                 const message = `Pedido:\n${cartItems}\nTotal: R$ ${total}\nEndereço: ${address}\nTelefone: ${phone}\nForma de Pagamento: ${paymentMethod}`;
                 whatsappLink.href = `https://wa.me/5512988030108?text=${encodeURIComponent(message)}`;
-                whatsappLink.style.display = 'block';
+                whatsappLink.classList.remove('d-none');
 
-                alert('Informações prontas para envio via WhatsApp!');
+                alert('Pedido gerado! Clique no botão para enviar pelo WhatsApp.');
             });
 
             // Atualizar a exibição ao carregar a página
