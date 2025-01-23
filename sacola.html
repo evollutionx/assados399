@@ -68,6 +68,9 @@
                 <p><strong>Telefone:</strong> <span id="saved-phone"></span></p>
                 <p><strong>Forma de Pagamento:</strong> <span id="saved-payment-method"></span></p>
             </div>
+            <div class="card-footer text-center">
+                <a id="whatsapp-link" class="btn btn-success btn-block" target="_blank">Enviar para o WhatsApp</a>
+            </div>
         </div>
     </div>
 
@@ -78,6 +81,7 @@
             const totalPriceElement = document.getElementById('total-price');
             const form = document.getElementById('info-form');
             const savedInfoCard = document.getElementById('saved-info-card');
+            const whatsappLink = document.getElementById('whatsapp-link');
 
             // Atualiza a exibição da sacola
             function updateCartDisplay() {
@@ -87,7 +91,7 @@
                 for (const [item, details] of Object.entries(cart)) {
                     const listItem = document.createElement('li');
                     listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
-                    listItem.innerHTML = `
+                    listItem.innerHTML = ` 
                         <span>
                             <strong>${item}</strong> - R$ ${details.price.toFixed(2)} x ${details.quantity}
                         </span>
@@ -151,7 +155,16 @@
                     document.getElementById('saved-phone').textContent = userInfo.phone;
                     document.getElementById('saved-payment-method').textContent = userInfo.paymentMethod;
                     savedInfoCard.classList.remove('d-none');
+                    updateWhatsAppLink(userInfo);
                 }
+            }
+
+            // Atualizar link do WhatsApp
+            function updateWhatsAppLink(userInfo) {
+                const cartItems = Object.entries(cart).map(([item, details]) => `${item} - ${details.quantity}x R$ ${details.price.toFixed(2)}`).join(', ');
+                const total = Object.values(cart).reduce((sum, details) => sum + details.price * details.quantity, 0).toFixed(2);
+                const message = `Pedido:\n${cartItems}\nTotal: R$ ${total}\nEndereço: ${userInfo.address}\nTelefone: ${userInfo.phone}\nForma de Pagamento: ${userInfo.paymentMethod}`;
+                whatsappLink.href = `https://wa.me/5512988030108?text=${encodeURIComponent(message)}`;
             }
 
             // Atualizar a exibição ao carregar a página
