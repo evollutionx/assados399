@@ -32,6 +32,10 @@
             <div class="card-body">
                 <form id="info-form">
                     <div class="form-group">
+                        <label for="name">Nome:</label>
+                        <input type="text" id="name" class="form-control" placeholder="Digite seu nome" required>
+                    </div>
+                    <div class="form-group">
                         <label for="address">Endereço:</label>
                         <input type="text" id="address" class="form-control" placeholder="Digite seu endereço completo" required>
                     </div>
@@ -107,11 +111,12 @@
 
             // Gerar link do WhatsApp
             form.addEventListener('change', () => {
+                const name = document.getElementById('name').value.trim();
                 const address = document.getElementById('address').value.trim();
                 const phone = document.getElementById('phone').value.trim();
                 const paymentMethod = document.getElementById('payment-method').value;
 
-                if (address && phone && paymentMethod) {
+                if (name && address && phone && paymentMethod) {
                     // Gerar o link do WhatsApp com as informações
                     const cartItems = Object.entries(cart)
                         .map(([item, details]) => `${item} - ${details.quantity}x R$ ${details.price.toFixed(2)}`)
@@ -119,7 +124,7 @@
                     const total = Object.values(cart)
                         .reduce((sum, details) => sum + details.price * details.quantity, 0)
                         .toFixed(2);
-                    const message = `Pedido:\n${cartItems}\nTotal: R$ ${total}\nEndereço: ${address}\nTelefone: ${phone}\nForma de Pagamento: ${paymentMethod}`;
+                    const message = `Olá, meu nome é ${name}.\n\nPedido:\n${cartItems}\n\nTotal: R$ ${total}\nEndereço: ${address}\nTelefone: ${phone}\nForma de Pagamento: ${paymentMethod}`;
                     whatsappLink.href = `https://wa.me/5512988030108?text=${encodeURIComponent(message)}`;
                     whatsappLink.classList.remove('d-none');
                 } else {
