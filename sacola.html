@@ -11,7 +11,7 @@
     <div class="container">
         <h1 class="text-center my-4">Sacola de Compras</h1>
         <div class="card shadow">
-            <div class="card-header bg-primary text-white">
+            <div class="card-header bg-secondary text-white">
                 <h2 class="text-center">Itens na Sacola</h2>
             </div>
             <ul id="cart-items" class="list-group list-group-flush"></ul>
@@ -46,12 +46,11 @@
             </div>
         </div>
     </div>
-    <script src="scripts.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', (event) => {
             const cart = getCart();
             const cartItems = document.getElementById('cart-items');
-
+    
             for (const item in cart) {
                 const listItem = document.createElement('li');
                 listItem.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
@@ -59,28 +58,46 @@
                                       <span class="text-secondary">Total: R$ ${(cart[item].quantity * cart[item].price).toFixed(2)}</span>`;
                 cartItems.appendChild(listItem);
             }
-
+    
             document.getElementById('send-whatsapp').addEventListener('click', function() {
                 const name = document.getElementById('name').value;
                 const address = document.getElementById('address').value;
                 const phone = document.getElementById('phone').value;
                 const payment = document.getElementById('payment').value;
-
+    
                 if (!name || !address || !phone || !payment) {
                     alert('Por favor, preencha todas as informações do cliente.');
                     return;
                 }
-
+    
                 let message = `Itens na sacola:\n`;
                 for (const item in cart) {
                     message += `${item}: ${cart[item].quantity} x R$ ${cart[item].price} = R$ ${(cart[item].quantity * cart[item].price).toFixed(2)}\n`;
                 }
                 message += `\nNome: ${name}\nEndereço: ${address}\nTelefone: ${phone}\nForma de Pagamento: ${payment}`;
-
+    
                 const encodedMessage = encodeURIComponent(message);
                 window.open(`https://wa.me/5512988030108?text=${encodedMessage}`, '_blank');
+    
+                // Apagar cookies após o envio
+                clearCart();
+                alert("Carrinho apagado após o envio!");
             });
         });
+    
+        function getCart() {
+            const cart = document.cookie.split(';').find(c => c.trim().startsWith('cart='));
+            return cart ? JSON.parse(decodeURIComponent(cart.split('=')[1])) : {};
+        }
+    
+        function setCart(cart) {
+            document.cookie = `cart=${encodeURIComponent(JSON.stringify(cart))};path=/;`;
+        }
+    
+        function clearCart() {
+            document.cookie = "cart=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+        }
     </script>
+    
 </body>
 </html>
