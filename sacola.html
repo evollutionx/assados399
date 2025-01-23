@@ -127,7 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 .reduce((sum, details) => sum + details.price * details.quantity, 0)
                 .toFixed(2);
 
-            const message = `Olá, meu nome é ${name}.\n\nPedido:\n${cartItems}\n-----------------\n*Total Geral: R$ ${total}*\n-----------------\nEndereço: ${address}\nTelefone: ${phone}\nForma de Pagamento: ${paymentMethod}`;
+            const message = `Olá, meu nome é ${name}.\n\nPedido:\n${cartItems}\n----------------------\n*Total Geral: R$ ${total}*\n----------------------\nEndereço: ${address}\nTelefone: ${phone}\nForma de Pagamento: ${paymentMethod}`;
             const whatsappUrl = `https://wa.me/5512988030108?text=${encodeURIComponent(message)}`;
 
             // Atualizar o link do botão para o WhatsApp
