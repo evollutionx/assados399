@@ -10,150 +10,143 @@
         body {
             background-color: #f8f9fa;
             font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
         }
 
         h1 {
             color: #343a40;
-            margin-left: 10px;
             font-size: 1.5rem;
+            text-align: center;
+            margin: 10px 0;
         }
 
         .card {
-            margin-top: 20px;
             border: 1px solid #dee2e6;
             border-radius: 0.25rem;
-            transition: transform 0.2s;
-        }
-
-        .card:hover {
-            transform: scale(1.05);
+            margin-bottom: 20px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
         }
 
         .card-header {
             background-color: #007bff;
             color: #fff;
+            text-align: center;
             padding: 10px;
         }
 
         .list-group-item {
             font-size: 1rem;
-            padding: 15px 20px;
-            transition: background-color 0.2s;
+            padding: 10px 10px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
         }
 
-        .list-group-item:hover {
-            background-color: #f1f1f1;
+        .list-group-item strong {
+            font-size: 1rem;
         }
 
-        .animated-logo {
-            max-width: 80px;
-            animation: bounce 2s infinite;
-        }
-
-        @keyframes bounce {
-            0%, 20%, 50%, 80%, 100% {
-                transform: translateY(0);
-            }
-            40% {
-                transform: translateY(-20px);
-            }
-            60% {
-                transform: translateY(-10px);
-            }
-        }
-
-        .img-fluid {
-            max-width: 100%;
-            height: auto;
-        }
-
-        /* Mobile-first adjustments */
         .quantity-input {
             width: 60px;
+            text-align: center;
         }
 
-        .add-to-cart {
-            font-size: 1rem;
+        .quantity-controls {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .quantity-controls button {
+            margin: 0 5px;
+        }
+
+        .btn-success {
             margin-left: 10px;
         }
 
-        .btn-sm {
-            padding: 5px 10px;
-        }
-
-        /* Adjustments for larger screens */
-        @media (min-width: 576px) {
-            h1 {
-                font-size: 2rem;
-            }
-            .card {
-                margin-top: 30px;
-            }
-            .quantity-input {
-                width: 80px;
-            }
+        .card-footer {
+            text-align: center;
         }
 
         @media (min-width: 768px) {
-            .container {
-                max-width: 720px;
+            h1 {
+                font-size: 2rem;
             }
 
-            .add-to-cart {
-                font-size: 1.2rem;
-            }
-        }
-
-        @media (min-width: 992px) {
-            .container {
-                max-width: 960px;
+            .list-group-item {
+                font-size: 1.1rem;
             }
 
-            .add-to-cart {
-                font-size: 1.4rem;
-            }
-        }
-
-        @media (min-width: 1200px) {
-            .container {
-                max-width: 1140px;
+            .quantity-controls {
+                margin-top: 0;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <div class="d-flex justify-content-center align-items-center my-4">
-            <img src="logo.png" alt="Logo Costelaria e Assados 399" class="img-fluid animated-logo">
-            <h1 class="ml-3">COSTELARIA E ASSADOS 399</h1>
+        <!-- Logo e título -->
+        <div class="text-center my-4">
+            <img src="logo.png" alt="Logo Costelaria e Assados 399" class="img-fluid animated-logo" style="max-width: 80px;">
+            <h1>COSTELARIA E ASSADOS 399</h1>
         </div>
-        <div class="card shadow">
-            <div class="card-header bg-secondary text-white">
-                <h2 class="text-center">Cardápio</h2>
+
+        <!-- Cardápio -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="h5">Cardápio</h2>
             </div>
             <ul class="list-group list-group-flush">
-                <li class="list-group-item d-flex justify-content-between align-items-center">
-                    🐔 <strong>Frango Assado - Unidade</strong> R$ 50,00
-                    <div class="d-flex align-items-center">
+                <li class="list-group-item">
+                    🐔 <strong>Frango Assado - Unidade</strong> 
+                    <span>R$ 50,00</span>
+                    <div class="quantity-controls">
                         <button class="btn btn-outline-secondary btn-sm quantity-decrease" data-item="Frango Assado">-</button>
-                        <input type="number" class="form-control mx-2 quantity-input" value="1" min="1" data-item="Frango Assado">
+                        <input type="number" class="form-control quantity-input" value="1" min="1" data-item="Frango Assado">
                         <button class="btn btn-outline-secondary btn-sm quantity-increase" data-item="Frango Assado">+</button>
-                        <button class="btn btn-success add-to-cart ml-2" data-item="Frango Assado" data-price="50">
+                        <button class="btn btn-success btn-sm add-to-cart" data-item="Frango Assado" data-price="50">
                             <i class="fas fa-cart-plus"></i>
                         </button>
                     </div>
                 </li>
-                <!-- Repeat for other menu items -->
+
+                <!-- Outros itens do cardápio seguem a mesma estrutura -->
+                <li class="list-group-item">
+                    🥩 <strong>Costela bovina - Kg</strong> 
+                    <span>R$ 75,00</span>
+                    <div class="quantity-controls">
+                        <button class="btn btn-outline-secondary btn-sm quantity-decrease" data-item="Costela bovina">-</button>
+                        <input type="number" class="form-control quantity-input" value="1" min="1" data-item="Costela bovina">
+                        <button class="btn btn-outline-secondary btn-sm quantity-increase" data-item="Costela bovina">+</button>
+                        <button class="btn btn-success btn-sm add-to-cart" data-item="Costela bovina" data-price="75">
+                            <i class="fas fa-cart-plus"></i>
+                        </button>
+                    </div>
+                </li>
+                <!-- Repetir estrutura para outros itens -->
             </ul>
-            <div class="card-footer text-center">
-                <a href="sacola.html" class="btn btn-secondary">Ver Sacola de Compras</a>
+            <div class="card-footer">
+                <a href="sacola.html" class="btn btn-secondary btn-sm">Ver Sacola de Compras</a>
             </div>
         </div>
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', (event) => {
-            const cart = getCart();
+        document.addEventListener('DOMContentLoaded', () => {
+            const cart = JSON.parse(localStorage.getItem('cart')) || {};
+
+            // Atualizar carrinho local
+            const updateCart = (item, price, quantity) => {
+                if (cart[item]) {
+                    cart[item].quantity += quantity;
+                } else {
+                    cart[item] = { price, quantity };
+                }
+                localStorage.setItem('cart', JSON.stringify(cart));
+            };
 
             document.querySelectorAll('.add-to-cart').forEach(button => {
                 button.addEventListener('click', function () {
@@ -162,43 +155,26 @@
                     const quantityInput = this.parentElement.querySelector('.quantity-input');
                     const quantity = parseInt(quantityInput.value) || 1;
 
-                    if (cart[item]) {
-                        cart[item].quantity += quantity;
-                    } else {
-                        cart[item] = { price: price, quantity: quantity };
-                    }
-
-                    setCart(cart);
+                    updateCart(item, price, quantity);
                     alert(`${quantity} x ${item} foi adicionado ao carrinho!`);
                 });
             });
 
             document.querySelectorAll('.quantity-decrease').forEach(button => {
                 button.addEventListener('click', function () {
-                    const quantityInput = this.parentElement.querySelector('.quantity-input');
-                    const currentQuantity = parseInt(quantityInput.value) || 1;
-                    if (currentQuantity > 1) {
-                        quantityInput.value = currentQuantity - 1;
-                    }
+                    const quantityInput = this.nextElementSibling;
+                    const value = Math.max(1, parseInt(quantityInput.value) - 1);
+                    quantityInput.value = value;
                 });
             });
 
             document.querySelectorAll('.quantity-increase').forEach(button => {
                 button.addEventListener('click', function () {
-                    const quantityInput = this.parentElement.querySelector('.quantity-input');
-                    const currentQuantity = parseInt(quantityInput.value) || 1;
-                    quantityInput.value = currentQuantity + 1;
+                    const quantityInput = this.previousElementSibling;
+                    quantityInput.value = parseInt(quantityInput.value) + 1;
                 });
             });
         });
-
-        function getCart() {
-            return JSON.parse(localStorage.getItem('cart')) || {};
-        }
-
-        function setCart(cart) {
-            localStorage.setItem('cart', JSON.stringify(cart));
-        }
     </script>
 </body>
 </html>
