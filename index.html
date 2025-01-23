@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         });
     });
 
-    document.querySelectorAll('.quantity-minus').forEach(button => {
+    document.querySelectorAll('.quantity-decrease').forEach(button => {
         button.addEventListener('click', function() {
             const quantityInput = this.parentElement.querySelector('.quantity-input');
             const currentQuantity = parseInt(quantityInput.value) || 1;
@@ -212,7 +212,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         });
     });
 
-    document.querySelectorAll('.quantity-plus').forEach(button => {
+    document.querySelectorAll('.quantity-increase').forEach(button => {
         button.addEventListener('click', function() {
             const quantityInput = this.parentElement.querySelector('.quantity-input');
             const currentQuantity = parseInt(quantityInput.value) || 1;
