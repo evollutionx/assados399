@@ -5,6 +5,7 @@ body {
 
 h1 {
     color: #343a40;
+    margin-left: 20px;
 }
 
 .card {
@@ -35,7 +36,7 @@ h1 {
 }
 
 .animated-logo {
-    max-width: 200px;
+    max-width: 100px;
     animation: bounce 2s infinite;
 }
 
