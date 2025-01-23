@@ -10,6 +10,8 @@
 <body>
     <div class="container mt-4">
         <h1 class="text-center mb-4">Sacola de Compras</h1>
+        
+        <!-- Sacola -->
         <div class="card shadow mb-4">
             <div class="card-header bg-secondary text-white">
                 <h3 class="text-center">Itens na Sacola</h3>
@@ -27,15 +29,44 @@
             </div>
         </div>
         
-        <!-- Seção de informações adicionais -->
+        <!-- Formulário de informações -->
         <div class="card shadow">
             <div class="card-header bg-info text-white">
-                <h3 class="text-center">Informações de Contato</h3>
+                <h3 class="text-center">Informações de Entrega</h3>
             </div>
             <div class="card-body">
-                <p><strong>Endereço:</strong> Rua Exemplo, 123 - Bairro Centro, São Paulo - SP</p>
-                <p><strong>Telefone:</strong> (11) 99999-9999</p>
-                <p><strong>Formas de Pagamento:</strong> Dinheiro, Cartão de Crédito/Débito, PIX</p>
+                <form id="info-form">
+                    <div class="form-group">
+                        <label for="address">Endereço:</label>
+                        <input type="text" id="address" class="form-control" placeholder="Digite seu endereço completo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Telefone:</label>
+                        <input type="tel" id="phone" class="form-control" placeholder="(11) 99999-9999" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="payment-method">Forma de Pagamento:</label>
+                        <select id="payment-method" class="form-control" required>
+                            <option value="" disabled selected>Selecione...</option>
+                            <option value="Dinheiro">Dinheiro</option>
+                            <option value="Cartão de Crédito/Débito">Cartão de Crédito/Débito</option>
+                            <option value="PIX">PIX</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Salvar Informações</button>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Informações salvas -->
+        <div class="card shadow mt-4 d-none" id="saved-info-card">
+            <div class="card-header bg-success text-white">
+                <h3 class="text-center">Informações Salvas</h3>
+            </div>
+            <div class="card-body">
+                <p><strong>Endereço:</strong> <span id="saved-address"></span></p>
+                <p><strong>Telefone:</strong> <span id="saved-phone"></span></p>
+                <p><strong>Forma de Pagamento:</strong> <span id="saved-payment-method"></span></p>
             </div>
         </div>
     </div>
@@ -45,8 +76,10 @@
             const cart = getCart();
             const cartItemsContainer = document.getElementById('cart-items');
             const totalPriceElement = document.getElementById('total-price');
+            const form = document.getElementById('info-form');
+            const savedInfoCard = document.getElementById('saved-info-card');
 
-            // Atualiza a sacola na página
+            // Atualiza a exibição da sacola
             function updateCartDisplay() {
                 cartItemsContainer.innerHTML = '';
                 let total = 0;
@@ -68,21 +101,20 @@
                 totalPriceElement.textContent = total.toFixed(2);
             }
 
-            // Função para obter o carrinho do localStorage
+            // Obter e salvar dados no localStorage
             function getCart() {
                 return JSON.parse(localStorage.getItem('cart')) || {};
             }
 
-            // Função para salvar o carrinho no localStorage
             function setCart(cart) {
                 localStorage.setItem('cart', JSON.stringify(cart));
             }
 
-            // Esvaziar a sacola e recarregar a página
+            // Esvaziar sacola
             document.getElementById('clear-cart').addEventListener('click', () => {
                 localStorage.removeItem('cart');
                 alert('Sacola esvaziada!');
-                location.reload(); // Atualiza a página
+                location.reload();
             });
 
             // Finalizar compra
@@ -92,12 +124,39 @@
                 } else {
                     alert('Compra finalizada! Obrigado por escolher nossa Costelaria e Assados 399.');
                     localStorage.removeItem('cart');
-                    location.reload(); // Atualiza a página
+                    location.reload();
                 }
             });
 
-            // Atualizar a exibição da sacola ao carregar a página
+            // Salvar informações do formulário
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+
+                const address = document.getElementById('address').value;
+                const phone = document.getElementById('phone').value;
+                const paymentMethod = document.getElementById('payment-method').value;
+
+                localStorage.setItem('userInfo', JSON.stringify({ address, phone, paymentMethod }));
+
+                displaySavedInfo();
+                form.reset();
+                alert('Informações salvas com sucesso!');
+            });
+
+            // Exibir informações salvas
+            function displaySavedInfo() {
+                const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+                if (userInfo) {
+                    document.getElementById('saved-address').textContent = userInfo.address;
+                    document.getElementById('saved-phone').textContent = userInfo.phone;
+                    document.getElementById('saved-payment-method').textContent = userInfo.paymentMethod;
+                    savedInfoCard.classList.remove('d-none');
+                }
+            }
+
+            // Atualizar a exibição ao carregar a página
             updateCartDisplay();
+            displaySavedInfo();
         });
     </script>
 </body>
