@@ -71,7 +71,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const clearCartButton = document.getElementById('clear-cart');
     const form = document.getElementById('info-form');
 
-    // Atualiza a exibição da sacola
     function updateCartDisplay() {
         cartItemsContainer.innerHTML = '';
         let total = 0;
@@ -83,6 +82,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <span>
                     <strong>${item}</strong> - R$ ${details.price.toFixed(2)} x ${details.quantity}
                 </span>
+                <div>
+                    <button class="btn btn-sm btn-outline-secondary decrease-quantity" data-item="${item}">-</button>
+                    <button class="btn btn-sm btn-outline-secondary increase-quantity" data-item="${item}">+</button>
+                    <button class="btn btn-sm btn-outline-danger delete-item" data-item="${item}"><i class="fas fa-trash-alt"></i></button>
+                </div>
                 <span>R$ ${(details.price * details.quantity).toFixed(2)}</span>
             `;
             cartItemsContainer.appendChild(listItem);
@@ -93,7 +97,6 @@ document.addEventListener('DOMContentLoaded', () => {
         totalPriceElement.textContent = total.toFixed(2);
     }
 
-    // Obter e salvar dados no localStorage
     function getCart() {
         return JSON.parse(localStorage.getItem('cart')) || {};
     }
@@ -102,14 +105,31 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('cart', JSON.stringify(cart));
     }
 
-    // Esvaziar sacola
+    cartItemsContainer.addEventListener('click', (e) => {
+        const item = e.target.dataset.item;
+        if (e.target.classList.contains('increase-quantity')) {
+            cart[item].quantity += 1;
+            setCart(cart);
+            updateCartDisplay();
+        } else if (e.target.classList.contains('decrease-quantity')) {
+            if (cart[item].quantity > 1) {
+                cart[item].quantity -= 1;
+                setCart(cart);
+                updateCartDisplay();
+            }
+        } else if (e.target.classList.contains('delete-item')) {
+            delete cart[item];
+            setCart(cart);
+            updateCartDisplay();
+        }
+    });
+
     clearCartButton.addEventListener('click', () => {
         localStorage.removeItem('cart');
         alert('Sacola esvaziada!');
         location.reload();
     });
 
-    // Gerar link do WhatsApp
     form.addEventListener('change', () => {
         const name = document.getElementById('name').value.trim();
         const address = document.getElementById('address').value.trim();
@@ -117,7 +137,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const paymentMethod = document.getElementById('payment-method').value;
 
         if (name && address && phone && paymentMethod) {
-            // Gerar o link do WhatsApp com as informações
             const cartItems = Object.entries(cart)
                 .map(([item, details]) => 
                     `${item}\nQuantidade: ${details.quantity}\nValor Unitário: R$ ${details.price.toFixed(2)}\nTotal: R$ ${(details.price * details.quantity).toFixed(2)}\n`
@@ -130,7 +149,6 @@ document.addEventListener('DOMContentLoaded', () => {
             const message = `Olá, meu nome é ${name}.\n\nPedido:\n${cartItems}\n----------------------\n*Total Geral: R$ ${total}*\n----------------------\nEndereço: ${address}\nTelefone: ${phone}\nForma de Pagamento: ${paymentMethod}`;
             const whatsappUrl = `https://wa.me/5512988030108?text=${encodeURIComponent(message)}`;
 
-            // Atualizar o link do botão para o WhatsApp
             whatsappLink.dataset.url = whatsappUrl;
             whatsappLink.classList.remove('d-none');
         } else {
@@ -138,22 +156,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Ir para o WhatsApp ao clicar no botão
     whatsappLink.addEventListener('click', (e) => {
-        e.preventDefault(); // Prevenir comportamento padrão
+        e.preventDefault();
         const url = whatsappLink.dataset.url;
         if (url) {
-            localStorage.removeItem('cart'); // Esvaziar o carrinho
+            localStorage.removeItem('cart');
             alert('Pedido enviado! A sacola será esvaziada.');
-            location.href = url; // Abrir o WhatsApp na mesma aba
+            location.href = url;
         }
     });
 
-    // Atualizar a exibição ao carregar a página
     updateCartDisplay();
 });
 </script>
-
 
 </body>
 </html>
