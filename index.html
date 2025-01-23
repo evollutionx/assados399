@@ -184,16 +184,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
     const cart = getCart();
 
     document.querySelectorAll('.add-to-cart').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             const item = this.dataset.item;
-            const price = this.dataset.price;
+            const price = parseFloat(this.dataset.price);
             const quantityInput = this.parentElement.querySelector('.quantity-input');
             const quantity = parseInt(quantityInput.value) || 1;
 
             if (cart[item]) {
                 cart[item].quantity += quantity;
             } else {
-                cart[item] = { price: parseFloat(price), quantity: quantity };
+                cart[item] = { price: price, quantity: quantity };
             }
 
             setCart(cart);
@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 
     document.querySelectorAll('.quantity-decrease').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             const quantityInput = this.parentElement.querySelector('.quantity-input');
             const currentQuantity = parseInt(quantityInput.value) || 1;
             if (currentQuantity > 1) {
@@ -212,7 +212,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 
     document.querySelectorAll('.quantity-increase').forEach(button => {
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
             const quantityInput = this.parentElement.querySelector('.quantity-input');
             const currentQuantity = parseInt(quantityInput.value) || 1;
             quantityInput.value = currentQuantity + 1;
@@ -221,13 +221,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
 });
 
 function getCart() {
-    const cart = document.cookie.split(';').find(c => c.trim().startsWith('cart='));
-    return cart ? JSON.parse(decodeURIComponent(cart.split('=')[1])) : {};
+    return JSON.parse(localStorage.getItem('cart')) || {};
 }
 
 function setCart(cart) {
-    document.cookie = `cart=${encodeURIComponent(JSON.stringify(cart))};path=/;`;
+    localStorage.setItem('cart', JSON.stringify(cart));
 }
+
 
 </script>
 </body>
