@@ -106,22 +106,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     cartItemsContainer.addEventListener('click', (e) => {
-        const item = e.target.dataset.item;
-        if (e.target.classList.contains('increase-quantity')) {
-            cart[item].quantity += 1;
-            setCart(cart);
-            updateCartDisplay();
-        } else if (e.target.classList.contains('decrease-quantity')) {
-            if (cart[item].quantity > 1) {
-                cart[item].quantity -= 1;
-                setCart(cart);
-                updateCartDisplay();
-            }
-        } else if (e.target.classList.contains('delete-item')) {
-            delete cart[item];
-            setCart(cart);
-            updateCartDisplay();
-        }
+const item = e.target.dataset.item;
+if (e.target.classList.contains('increase-quantity')) {
+    cart[item].quantity += 1;
+    setCart(cart);
+    updateCartDisplay();
+} else if (e.target.classList.contains('decrease-quantity')) {
+    if (cart[item].quantity > 1) {
+        cart[item].quantity -= 1;
+        setCart(cart);
+        updateCartDisplay();
+    }
+} else if (e.target.classList.contains('delete-item')) {
+    delete cart[item];
+    setCart(cart);
+    updateCartDisplay();
+}
+
     });
 
     clearCartButton.addEventListener('click', () => {
