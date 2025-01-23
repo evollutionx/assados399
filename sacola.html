@@ -62,79 +62,87 @@
         </div>
     </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const cart = getCart();
-            const cartItemsContainer = document.getElementById('cart-items');
-            const totalPriceElement = document.getElementById('total-price');
-            const whatsappLink = document.getElementById('whatsapp-link');
-            const clearCartButton = document.getElementById('clear-cart');
-            const form = document.getElementById('info-form');
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const cart = getCart();
+        const cartItemsContainer = document.getElementById('cart-items');
+        const totalPriceElement = document.getElementById('total-price');
+        const whatsappLink = document.getElementById('whatsapp-link');
+        const clearCartButton = document.getElementById('clear-cart');
+        const form = document.getElementById('info-form');
 
-            // Atualiza a exibição da sacola
-            function updateCartDisplay() {
-                cartItemsContainer.innerHTML = '';
-                let total = 0;
+        // Atualiza a exibição da sacola
+        function updateCartDisplay() {
+            cartItemsContainer.innerHTML = '';
+            let total = 0;
 
-                for (const [item, details] of Object.entries(cart)) {
-                    const listItem = document.createElement('li');
-                    listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
-                    listItem.innerHTML = `
-                        <span>
-                            <strong>${item}</strong> - R$ ${details.price.toFixed(2)} x ${details.quantity}
-                        </span>
-                        <span>R$ ${(details.price * details.quantity).toFixed(2)}</span>
-                    `;
-                    cartItemsContainer.appendChild(listItem);
+            for (const [item, details] of Object.entries(cart)) {
+                const listItem = document.createElement('li');
+                listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+                listItem.innerHTML = `
+                    <span>
+                        <strong>${item}</strong> - R$ ${details.price.toFixed(2)} x ${details.quantity}
+                    </span>
+                    <span>R$ ${(details.price * details.quantity).toFixed(2)}</span>
+                `;
+                cartItemsContainer.appendChild(listItem);
 
-                    total += details.price * details.quantity;
-                }
-
-                totalPriceElement.textContent = total.toFixed(2);
+                total += details.price * details.quantity;
             }
 
-            // Obter e salvar dados no localStorage
-            function getCart() {
-                return JSON.parse(localStorage.getItem('cart')) || {};
-            }
+            totalPriceElement.textContent = total.toFixed(2);
+        }
 
-            function setCart(cart) {
-                localStorage.setItem('cart', JSON.stringify(cart));
-            }
+        // Obter e salvar dados no localStorage
+        function getCart() {
+            return JSON.parse(localStorage.getItem('cart')) || {};
+        }
 
-            // Esvaziar sacola
-            clearCartButton.addEventListener('click', () => {
-                localStorage.removeItem('cart');
-                alert('Sacola esvaziada!');
-                location.reload();
-            });
+        function setCart(cart) {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
 
-            // Gerar link do WhatsApp
-            form.addEventListener('change', () => {
-                const name = document.getElementById('name').value.trim();
-                const address = document.getElementById('address').value.trim();
-                const phone = document.getElementById('phone').value.trim();
-                const paymentMethod = document.getElementById('payment-method').value;
-
-                if (name && address && phone && paymentMethod) {
-                    // Gerar o link do WhatsApp com as informações
-                    const cartItems = Object.entries(cart)
-                        .map(([item, details]) => `${item} - ${details.quantity}x R$ ${details.price.toFixed(2)}`)
-                        .join(', ');
-                    const total = Object.values(cart)
-                        .reduce((sum, details) => sum + details.price * details.quantity, 0)
-                        .toFixed(2);
-                    const message = `Olá, meu nome é ${name}.\n\nPedido:\n${cartItems}\n\nTotal: R$ ${total}\nEndereço: ${address}\nTelefone: ${phone}\nForma de Pagamento: ${paymentMethod}`;
-                    whatsappLink.href = `https://wa.me/5512988030108?text=${encodeURIComponent(message)}`;
-                    whatsappLink.classList.remove('d-none');
-                } else {
-                    whatsappLink.classList.add('d-none');
-                }
-            });
-
-            // Atualizar a exibição ao carregar a página
-            updateCartDisplay();
+        // Esvaziar sacola
+        clearCartButton.addEventListener('click', () => {
+            localStorage.removeItem('cart');
+            alert('Sacola esvaziada!');
+            location.reload();
         });
-    </script>
+
+        // Gerar link do WhatsApp
+        form.addEventListener('change', () => {
+            const name = document.getElementById('name').value.trim();
+            const address = document.getElementById('address').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const paymentMethod = document.getElementById('payment-method').value;
+
+            if (name && address && phone && paymentMethod) {
+                // Gerar o link do WhatsApp com as informações
+                const cartItems = Object.entries(cart)
+                    .map(([item, details]) => `${item} - ${details.quantity}x R$ ${details.price.toFixed(2)}`)
+                    .join(', ');
+                const total = Object.values(cart)
+                    .reduce((sum, details) => sum + details.price * details.quantity, 0)
+                    .toFixed(2);
+                const message = `Olá, meu nome é ${name}.\n\nPedido:\n${cartItems}\n\nTotal: R$ ${total}\nEndereço: ${address}\nTelefone: ${phone}\nForma de Pagamento: ${paymentMethod}`;
+                whatsappLink.href = `https://wa.me/5512988030108?text=${encodeURIComponent(message)}`;
+                whatsappLink.classList.remove('d-none');
+            } else {
+                whatsappLink.classList.add('d-none');
+            }
+        });
+
+        // Limpar o carrinho após clicar no link do WhatsApp
+        whatsappLink.addEventListener('click', () => {
+            localStorage.removeItem('cart');
+            alert('Pedido enviado! A sacola será esvaziada.');
+            location.reload(); // Atualiza a página para limpar a sacola
+        });
+
+        // Atualizar a exibição ao carregar a página
+        updateCartDisplay();
+    });
+</script>
+
 </body>
 </html>
