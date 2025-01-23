@@ -5,15 +5,35 @@ document.addEventListener('DOMContentLoaded', (event) => {
         button.addEventListener('click', function() {
             const item = this.dataset.item;
             const price = this.dataset.price;
+            const quantityInput = this.parentElement.querySelector('.quantity-input');
+            const quantity = parseInt(quantityInput.value) || 1;
 
             if (cart[item]) {
-                cart[item].quantity += 1;
+                cart[item].quantity += quantity;
             } else {
-                cart[item] = { price: parseFloat(price), quantity: 1 };
+                cart[item] = { price: parseFloat(price), quantity: quantity };
             }
 
             setCart(cart);
-            alert(`${item} foi adicionado ao carrinho!`);
+            alert(`${quantity} x ${item} foi adicionado ao carrinho!`);
+        });
+    });
+
+    document.querySelectorAll('.quantity-minus').forEach(button => {
+        button.addEventListener('click', function() {
+            const quantityInput = this.parentElement.querySelector('.quantity-input');
+            const currentQuantity = parseInt(quantityInput.value) || 1;
+            if (currentQuantity > 1) {
+                quantityInput.value = currentQuantity - 1;
+            }
+        });
+    });
+
+    document.querySelectorAll('.quantity-plus').forEach(button => {
+        button.addEventListener('click', function() {
+            const quantityInput = this.parentElement.querySelector('.quantity-input');
+            const currentQuantity = parseInt(quantityInput.value) || 1;
+            quantityInput.value = currentQuantity + 1;
         });
     });
 });
