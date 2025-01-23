@@ -15,6 +15,32 @@
                 <h2 class="text-center">Itens na Sacola</h2>
             </div>
             <ul id="cart-items" class="list-group list-group-flush"></ul>
+            <div class="card-body">
+                <h3 class="text-center">Informações do Cliente</h3>
+                <form id="customer-form">
+                    <div class="form-group">
+                        <label for="name">Nome</label>
+                        <input type="text" class="form-control" id="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="address">Endereço</label>
+                        <input type="text" class="form-control" id="address" placeholder="Rua, Nº, Bairro, Cidade" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Telefone</label>
+                        <input type="tel" class="form-control" id="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="payment">Forma de Pagamento</label>
+                        <select class="form-control" id="payment" required>
+                            <option>Dinheiro</option>
+                            <option>PIX</option>
+                            <option>Cartão de crédito</option>
+                            <option>Cartão de débito</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
             <div class="card-footer text-center">
                 <button id="send-whatsapp" class="btn btn-success">Enviar pelo WhatsApp</button>
             </div>
@@ -35,10 +61,22 @@
             }
 
             document.getElementById('send-whatsapp').addEventListener('click', function() {
-                let message = 'Itens na sacola:\n';
+                const name = document.getElementById('name').value;
+                const address = document.getElementById('address').value;
+                const phone = document.getElementById('phone').value;
+                const payment = document.getElementById('payment').value;
+
+                if (!name || !address || !phone || !payment) {
+                    alert('Por favor, preencha todas as informações do cliente.');
+                    return;
+                }
+
+                let message = `Itens na sacola:\n`;
                 for (const item in cart) {
                     message += `${item}: ${cart[item].quantity} x R$ ${cart[item].price} = R$ ${(cart[item].quantity * cart[item].price).toFixed(2)}\n`;
                 }
+                message += `\nNome: ${name}\nEndereço: ${address}\nTelefone: ${phone}\nForma de Pagamento: ${payment}`;
+
                 const encodedMessage = encodeURIComponent(message);
                 window.open(`https://wa.me/5512988030108?text=${encodedMessage}`, '_blank');
             });
