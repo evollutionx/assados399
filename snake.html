@@ -25,6 +25,26 @@
     <h1 class="mb-4">Snake Game</h1>
     <canvas id="gameCanvas" width="400" height="400"></canvas>
     <p class="mt-3">Score: <span id="score">0</span></p>
+    <button id="restartButton" class="btn btn-primary mt-3 d-none">Reiniciar</button>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="gameOverModal" tabindex="-1" aria-labelledby="gameOverLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="gameOverLabel">Fim de Jogo</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Sua pontuação final foi: <span id="finalScore">0</span></p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+          <button type="button" id="modalRestartButton" class="btn btn-primary">Reiniciar</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -38,6 +58,11 @@
     let direction = 'RIGHT';
     let food = { x: Math.floor(Math.random() * canvasSize), y: Math.floor(Math.random() * canvasSize) };
     let score = 0;
+    let gameInterval;
+
+    const restartButton = document.getElementById('restartButton');
+    const modalRestartButton = document.getElementById('modalRestartButton');
+    const gameOverModal = new bootstrap.Modal(document.getElementById('gameOverModal'));
 
     // Draw the snake
     function drawSnake() {
@@ -106,14 +131,26 @@
     // Main game loop
     function gameLoop() {
       if (checkCollision()) {
-        alert(`Game Over! Final Score: ${score}`);
-        document.location.reload();
+        clearInterval(gameInterval);
+        document.getElementById('finalScore').textContent = score;
+        gameOverModal.show();
+        return;
       }
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       drawFood();
       drawSnake();
       moveSnake();
+    }
+
+    // Restart the game
+    function restartGame() {
+      snake = [{ x: 10, y: 10 }];
+      direction = 'RIGHT';
+      food = { x: Math.floor(Math.random() * canvasSize), y: Math.floor(Math.random() * canvasSize) };
+      score = 0;
+      document.getElementById('score').textContent = score;
+      gameInterval = setInterval(gameLoop, 100);
     }
 
     // Control the snake
@@ -134,8 +171,14 @@
       }
     });
 
+    restartButton.addEventListener('click', () => restartGame());
+    modalRestartButton.addEventListener('click', () => {
+      gameOverModal.hide();
+      restartGame();
+    });
+
     // Start the game
-    setInterval(gameLoop, 100);
+    restartGame();
   </script>
 </body>
 </html>
