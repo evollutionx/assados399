@@ -6,6 +6,28 @@
     <title>Sacola de Compras</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+        .card {
+            border-radius: 0.25rem;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .card-header {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .list-group-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn-success {
+            margin-left: 10px;
+        }
+    </style>
 </head>
 <body>
     <div class="container mt-4">
@@ -62,114 +84,135 @@
         </div>
     </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const cart = getCart();
-    const cartItemsContainer = document.getElementById('cart-items');
-    const totalPriceElement = document.getElementById('total-price');
-    const whatsappLink = document.getElementById('whatsapp-link');
-    const clearCartButton = document.getElementById('clear-cart');
-    const form = document.getElementById('info-form');
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cart = JSON.parse(localStorage.getItem('cart')) || {};
+            const cartItemsContainer = document.getElementById('cart-items');
+            const totalPriceElement = document.getElementById('total-price');
+            const whatsappLink = document.getElementById('whatsapp-link');
+            const clearCartButton = document.getElementById('clear-cart');
+            const form = document.getElementById('info-form');
 
-    function updateCartDisplay() {
-        cartItemsContainer.innerHTML = '';
-        let total = 0;
+            // Função para formatar números com vírgula
+            const formatNumber = (value) => {
+                return value.toFixed(2).replace('.', ',');
+            };
 
-        for (const [item, details] of Object.entries(cart)) {
-            const listItem = document.createElement('li');
-            listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
-            listItem.innerHTML = `
-                <span>
-                    <strong>${item}</strong> - R$ ${details.price.toFixed(2)} x ${details.quantity}
-                </span>
-                <div>
-                    <button class="btn btn-sm btn-outline-secondary decrease-quantity" data-item="${item}">-</button>
-                    <button class="btn btn-sm btn-outline-secondary increase-quantity" data-item="${item}">+</button>
-                    <button class="btn btn-sm btn-outline-danger delete-item" data-item="${item}"><i class="fas fa-trash-alt"></i></button>
-                </div>
-                <span>R$ ${(details.price * details.quantity).toFixed(2)}</span>
-            `;
-            cartItemsContainer.appendChild(listItem);
+            // Atualiza a exibição dos itens no carrinho
+            const updateCartDisplay = () => {
+                cartItemsContainer.innerHTML = '';
+                let total = 0;
 
-            total += details.price * details.quantity;
-        }
+                for (const [item, details] of Object.entries(cart)) {
+                    const listItem = document.createElement('li');
+                    listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
 
-        totalPriceElement.textContent = total.toFixed(2);
-    }
+                    // Verifica se o item é vendido por peso ou por unidade
+                    const quantityOrWeight = details.weight ? `${formatNumber(details.weight)} Kg` : `${details.quantity} un`;
+                    const totalItemPrice = details.weight ? details.price * details.weight : details.price * details.quantity;
 
-    function getCart() {
-        return JSON.parse(localStorage.getItem('cart')) || {};
-    }
+                    listItem.innerHTML = `
+                        <span>
+                            <strong>${item}</strong> - R$ ${formatNumber(details.price)} x ${quantityOrWeight}
+                        </span>
+                        <div>
+                            <button class="btn btn-sm btn-outline-secondary decrease-quantity" data-item="${item}">-</button>
+                            <button class="btn btn-sm btn-outline-secondary increase-quantity" data-item="${item}">+</button>
+                            <button class="btn btn-sm btn-outline-danger delete-item" data-item="${item}"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                        <span>R$ ${formatNumber(totalItemPrice)}</span>
+                    `;
+                    cartItemsContainer.appendChild(listItem);
 
-    function setCart(cart) {
-        localStorage.setItem('cart', JSON.stringify(cart));
-    }
+                    total += totalItemPrice;
+                }
 
-    cartItemsContainer.addEventListener('click', (e) => {
-const item = e.target.dataset.item;
-if (e.target.classList.contains('increase-quantity')) {
-    cart[item].quantity += 1;
-    setCart(cart);
-    updateCartDisplay();
-} else if (e.target.classList.contains('decrease-quantity')) {
-    if (cart[item].quantity > 1) {
-        cart[item].quantity -= 1;
-        setCart(cart);
-        updateCartDisplay();
-    }
-} else if (e.target.classList.contains('delete-item')) {
-    delete cart[item];
-    setCart(cart);
-    updateCartDisplay();
-}
+                totalPriceElement.textContent = formatNumber(total);
+            };
 
-    });
+            // Função para obter o carrinho do localStorage
+            const getCart = () => {
+                return JSON.parse(localStorage.getItem('cart')) || {};
+            };
 
-    clearCartButton.addEventListener('click', () => {
-        localStorage.removeItem('cart');
-        alert('Sacola esvaziada!');
-        location.reload();
-    });
+            // Função para salvar o carrinho no localStorage
+            const setCart = (cart) => {
+                localStorage.setItem('cart', JSON.stringify(cart));
+            };
 
-    form.addEventListener('change', () => {
-        const name = document.getElementById('name').value.trim();
-        const address = document.getElementById('address').value.trim();
-        const phone = document.getElementById('phone').value.trim();
-        const paymentMethod = document.getElementById('payment-method').value;
+            // Evento para aumentar/diminuir quantidade ou excluir itens
+            cartItemsContainer.addEventListener('click', (e) => {
+                const item = e.target.dataset.item;
+                if (e.target.classList.contains('increase-quantity')) {
+                    if (cart[item].weight) {
+                        cart[item].weight += 0.1; // Aumenta o peso em 0.1 Kg
+                    } else {
+                        cart[item].quantity += 1; // Aumenta a quantidade em 1 unidade
+                    }
+                    setCart(cart);
+                    updateCartDisplay();
+                } else if (e.target.classList.contains('decrease-quantity')) {
+                    if (cart[item].weight && cart[item].weight > 0.1) {
+                        cart[item].weight -= 0.1; // Diminui o peso em 0.1 Kg
+                    } else if (cart[item].quantity > 1) {
+                        cart[item].quantity -= 1; // Diminui a quantidade em 1 unidade
+                    }
+                    setCart(cart);
+                    updateCartDisplay();
+                } else if (e.target.classList.contains('delete-item')) {
+                    delete cart[item];
+                    setCart(cart);
+                    updateCartDisplay();
+                }
+            });
 
-        if (name && address && phone && paymentMethod) {
-            const cartItems = Object.entries(cart)
-                .map(([item, details]) => 
-                    `${item}\nQuantidade: ${details.quantity}\nValor Unitário: R$ ${details.price.toFixed(2)}\nTotal: R$ ${(details.price * details.quantity).toFixed(2)}\n`
-                ).join('\n');
-            
-            const total = Object.values(cart)
-                .reduce((sum, details) => sum + details.price * details.quantity, 0)
-                .toFixed(2);
+            // Evento para esvaziar o carrinho
+            clearCartButton.addEventListener('click', () => {
+                localStorage.removeItem('cart');
+                alert('Sacola esvaziada!');
+                location.reload();
+            });
 
-            const message = `Olá, meu nome é ${name}.\n\nPedido:\n${cartItems}\n----------------------\n*Total Geral: R$ ${total}*\n----------------------\nEndereço: ${address}\nTelefone: ${phone}\nForma de Pagamento: ${paymentMethod}`;
-            const whatsappUrl = `https://wa.me/5512988030108?text=${encodeURIComponent(message)}`;
+            // Evento para atualizar o link do WhatsApp
+            form.addEventListener('change', () => {
+                const name = document.getElementById('name').value.trim();
+                const address = document.getElementById('address').value.trim();
+                const phone = document.getElementById('phone').value.trim();
+                const paymentMethod = document.getElementById('payment-method').value;
 
-            whatsappLink.dataset.url = whatsappUrl;
-            whatsappLink.classList.remove('d-none');
-        } else {
-            whatsappLink.classList.add('d-none');
-        }
-    });
+                if (name && address && phone && paymentMethod) {
+                    const cartItems = Object.entries(cart)
+                        .map(([item, details]) => {
+                            const quantityOrWeight = details.weight ? `${formatNumber(details.weight)} Kg` : `${details.quantity} un`;
+                            const totalItemPrice = details.weight ? details.price * details.weight : details.price * details.quantity;
+                            return `${item}\n${quantityOrWeight} - R$ ${formatNumber(details.price)}/un\nTotal: R$ ${formatNumber(totalItemPrice)}\n`;
+                        }).join('\n');
+                    
+                    const total = Object.values(cart)
+                        .reduce((sum, details) => sum + (details.weight ? details.price * details.weight : details.price * details.quantity), 0);
 
-    whatsappLink.addEventListener('click', (e) => {
-        e.preventDefault();
-        const url = whatsappLink.dataset.url;
-        if (url) {
-            localStorage.removeItem('cart');
-            alert('Pedido enviado! A sacola será esvaziada.');
-            location.href = url;
-        }
-    });
+                    const message = `Olá, meu nome é ${name}.\n\nPedido:\n${cartItems}\n----------------------\n*Total Geral: R$ ${formatNumber(total)}*\n----------------------\nEndereço: ${address}\nTelefone: ${phone}\nForma de Pagamento: ${paymentMethod}`;
+                    const whatsappUrl = `https://wa.me/5512988030108?text=${encodeURIComponent(message)}`;
 
-    updateCartDisplay();
-});
-</script>
+                    whatsappLink.href = whatsappUrl;
+                    whatsappLink.classList.remove('d-none');
+                } else {
+                    whatsappLink.classList.add('d-none');
+                }
+            });
 
+            // Evento para enviar o pedido pelo WhatsApp
+            whatsappLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                localStorage.removeItem('cart');
+                alert('Pedido enviado! A sacola será esvaziada.');
+                window.open(whatsappLink.href, '_blank');
+                location.reload();
+            });
+
+            // Atualiza a exibição do carrinho ao carregar a página
+            updateCartDisplay();
+        });
+    </script>
 </body>
-</html>
+    </html>
