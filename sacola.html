@@ -98,37 +98,37 @@
                 return value.toFixed(2).replace('.', ',');
             };
 
-            // Atualiza a exibição dos itens no carrinho
-            const updateCartDisplay = () => {
-                cartItemsContainer.innerHTML = '';
-                let total = 0;
+// Atualiza a exibição dos itens no carrinho
+const updateCartDisplay = () => {
+    cartItemsContainer.innerHTML = '';
+    let total = 0;
 
-                for (const [item, details] of Object.entries(cart)) {
-                    const listItem = document.createElement('li');
-                    listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+    for (const [item, details] of Object.entries(cart)) {
+        const listItem = document.createElement('li');
+        listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
 
-                    // Verifica se o item é vendido por peso ou por unidade
-                    const quantityOrWeight = details.weight ? `${formatNumber(details.weight)} Kg` : `${details.quantity} un`;
-                    const totalItemPrice = details.weight ? details.price * details.weight : details.price * details.quantity;
+        // Verifica se o item é vendido por peso ou por unidade
+        const quantityOrWeight = details.weight ? `${formatNumber(details.weight)} Kg` : `${details.quantity} un`;
+        const totalItemPrice = details.weight ? details.price * details.weight : details.price * details.quantity;
 
-                    listItem.innerHTML = `
-                        <span>
-                            <strong>${item}</strong> - R$ ${formatNumber(details.price)} x ${quantityOrWeight}
-                        </span>
-                        <div>
-                            <button class="btn btn-sm btn-outline-secondary decrease-quantity" data-item="${item}">-</button>
-                            <button class="btn btn-sm btn-outline-secondary increase-quantity" data-item="${item}">+</button>
-                            <button class="btn btn-sm btn-outline-danger delete-item" data-item="${item}"><i class="fas fa-trash-alt"></i></button>
-                        </div>
-                        <span>R$ ${formatNumber(totalItemPrice)}</span>
-                    `;
-                    cartItemsContainer.appendChild(listItem);
+        listItem.innerHTML = `
+            <span>
+                <strong>${item}</strong> - R$ ${formatNumber(details.price)} x ${quantityOrWeight}
+            </span>
+            <div>
+                <button class="btn btn-sm btn-outline-secondary decrease-quantity" data-item="${item}">-</button>
+                <button class="btn btn-sm btn-outline-secondary increase-quantity" data-item="${item}">+</button>
+                <button class="btn btn-sm btn-outline-danger delete-item" data-item="${item}"><i class="fas fa-trash-alt"></i></button>
+            </div>
+            <span>R$ ${formatNumber(totalItemPrice)}</span>
+        `;
+        cartItemsContainer.appendChild(listItem);
 
-                    total += totalItemPrice;
-                }
+        total += totalItemPrice;
+    }
 
-                totalPriceElement.textContent = formatNumber(total);
-            };
+    totalPriceElement.textContent = formatNumber(total);
+};
 
             // Função para obter o carrinho do localStorage
             const getCart = () => {
