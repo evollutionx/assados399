@@ -228,11 +228,11 @@
                         quantity = 1; // Quantidade fixa para itens por peso
                     } else if (quantityInput) {
                         quantity = parseInt(quantityInput.value) || 1;
-                        weight = 1; // Peso fixo para itens por unidade
+                        weight = 0; // Peso zero para itens por unidade
                     }
 
                     updateCart(item, price, quantity, weight);
-                    alert(`${weight} Kg de ${item} foi adicionado ao carrinho!`);
+                    alert(`${weight ? weight + ' Kg' : quantity + ' un'} de ${item} foi adicionado ao carrinho!`);
                 });
             });
 
@@ -253,4 +253,4 @@
         });
     </script>
 </body>
-    </html>
+</html>
