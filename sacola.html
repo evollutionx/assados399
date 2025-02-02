@@ -183,9 +183,11 @@
                 if (name && address && phone && paymentMethod) {
                     const cartItems = Object.entries(cart)
                         .map(([item, details]) => {
+                            // Verifica se o item é vendido por peso ou por unidade
                             const quantityOrWeight = details.weight ? `${formatNumber(details.weight)} Kg` : `${details.quantity} un`;
+                            const unitDescription = details.weight ? `R$ ${formatNumber(details.price)}/Kg` : `R$ ${formatNumber(details.price)}/un`;
                             const totalItemPrice = details.weight ? details.price * details.weight : details.price * details.quantity;
-                            return `${item}\n${quantityOrWeight} - R$ ${formatNumber(details.price)}/un\nTotal: R$ ${formatNumber(totalItemPrice)}\n`;
+                            return `${item}\n${quantityOrWeight} - ${unitDescription}\nTotal: R$ ${formatNumber(totalItemPrice)}\n`;
                         }).join('\n');
                     
                     const total = Object.values(cart)
@@ -215,4 +217,4 @@
         });
     </script>
 </body>
-    </html>
+                            </html>
