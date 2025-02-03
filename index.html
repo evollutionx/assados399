@@ -36,7 +36,7 @@
         }
 
         .list-group-item {
-            font-size: 1rem;
+            font-size: 0.9rem; /* Tamanho da fonte reduzido para mobile */
             padding: 10px 10px;
             display: flex;
             flex-wrap: wrap;
@@ -45,12 +45,13 @@
         }
 
         .list-group-item strong {
-            font-size: 1rem;
+            font-size: 0.9rem; /* Tamanho da fonte reduzido para mobile */
         }
 
         .quantity-input, .weight-input {
-            width: 60px;
+            width: 50px; /* Largura reduzida para mobile */
             text-align: center;
+            font-size: 0.9rem; /* Tamanho da fonte reduzido para mobile */
         }
 
         .quantity-controls {
@@ -61,27 +62,43 @@
 
         .quantity-controls button {
             margin: 0 5px;
+            font-size: 0.9rem; /* Tamanho da fonte reduzido para mobile */
         }
 
         .btn-success {
             margin-left: 10px;
+            font-size: 0.9rem; /* Tamanho da fonte reduzido para mobile */
         }
 
         .card-footer {
             text-align: center;
         }
 
+        /* Ajustes para telas maiores (desktop) */
         @media (min-width: 768px) {
             h1 {
                 font-size: 2rem;
             }
 
             .list-group-item {
-                font-size: 1.1rem;
+                font-size: 1rem; /* Tamanho da fonte maior para desktop */
             }
 
-            .quantity-controls {
-                margin-top: 0;
+            .list-group-item strong {
+                font-size: 1rem; /* Tamanho da fonte maior para desktop */
+            }
+
+            .quantity-input, .weight-input {
+                width: 60px; /* Largura maior para desktop */
+                font-size: 1rem; /* Tamanho da fonte maior para desktop */
+            }
+
+            .quantity-controls button {
+                font-size: 1rem; /* Tamanho da fonte maior para desktop */
+            }
+
+            .btn-success {
+                font-size: 1rem; /* Tamanho da fonte maior para desktop */
             }
         }
     </style>
