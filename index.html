@@ -10,21 +10,17 @@
         body {
             background-color: #f8f9fa;
             font-family: 'Arial', sans-serif;
-            margin: 0;
-            padding: 0;
         }
 
         h1 {
             color: #343a40;
             font-size: 1.5rem;
             text-align: center;
-            margin: 10px 0;
         }
 
         .card {
             border: 1px solid #dee2e6;
             border-radius: 0.25rem;
-            margin-bottom: 20px;
             box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
         }
 
@@ -32,73 +28,49 @@
             background-color: #007bff;
             color: #fff;
             text-align: center;
-            padding: 10px;
         }
 
         .list-group-item {
-            font-size: 0.8rem; /* Tamanho da fonte reduzido para mobile */
-            padding: 10px 10px;
+            font-size: 0.9rem;
+            padding: 10px;
             display: flex;
-            flex-wrap: wrap;
+            flex-direction: column;
             align-items: center;
-            justify-content: space-between;
-        }
-
-        .list-group-item strong {
-            font-size: 0.8rem; /* Tamanho da fonte reduzido para mobile */
-        }
-
-        .quantity-input, .weight-input {
-            width: 50px; /* Largura reduzida para mobile */
             text-align: center;
-            font-size: 0.9rem; /* Tamanho da fonte reduzido para mobile */
         }
 
         .quantity-controls {
             display: flex;
             align-items: center;
-            margin-top: 10px;
+            margin-top: 5px;
         }
 
-        .quantity-controls button {
-            margin: 0 5px;
-            font-size: 0.8rem; /* Tamanho da fonte reduzido para mobile */
+        .quantity-input, .weight-input {
+            width: 60px;
+            text-align: center;
+            font-size: 0.9rem;
         }
 
         .btn-success {
-            margin-left: 10px;
-            font-size: 0.8rem; /* Tamanho da fonte reduzido para mobile */
+            margin-top: 5px;
+            font-size: 0.9rem;
         }
 
-        .card-footer {
-            text-align: center;
+        .weight-description {
+            font-size: 0.8rem;
+            color: #6c757d;
+            margin-top: 5px;
         }
 
-        /* Ajustes para telas maiores (desktop) */
         @media (min-width: 768px) {
             h1 {
                 font-size: 2rem;
             }
 
             .list-group-item {
-                font-size: 1rem; /* Tamanho da fonte maior para desktop */
-            }
-
-            .list-group-item strong {
-                font-size: 1rem; /* Tamanho da fonte maior para desktop */
-            }
-
-            .quantity-input, .weight-input {
-                width: 60px; /* Largura maior para desktop */
-                font-size: 1rem; /* Tamanho da fonte maior para desktop */
-            }
-
-            .quantity-controls button {
-                font-size: 1rem; /* Tamanho da fonte maior para desktop */
-            }
-
-            .btn-success {
-                font-size: 1rem; /* Tamanho da fonte maior para desktop */
+                flex-direction: row;
+                justify-content: space-between;
+                text-align: left;
             }
         }
     </style>
@@ -129,20 +101,22 @@
                     </div>
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    🥩 <strong>Costela bovina - Kg R$ 75,00 </strong> Ex: 0,5 (meio quilo) ou 1 (1kg)
+                    🥩 <strong>Costela bovina - Kg R$ 75,00 </strong>
                     <div class="d-flex align-items-center">
                         <input type="number" class="form-control mx-2 weight-input" value="1" min="0.1" step="0.1" style="width: 80px;" data-item="Costela bovina - Kg" placeholder="Peso (Kg)">
                         <button class="btn btn-success add-to-cart ml-2" data-item="Costela bovina - Kg" data-price="75">
                             <i class="fas fa-cart-plus"></i>
                         </button>
+                        <div class="weight-description">Ex: 0,5 (meio quilo) ou 1 (1kg)</div>
                     </div>
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    🍖 <strong>Cupim - Kg R$ 85,00 </strong> Ex: 0,5 (meio quilo) ou 1 (1kg)
+                    🍖 <strong>Cupim - Kg R$ 85,00 </strong>
                     <div class="d-flex align-items-center">
                         <input type="number" class="form-control mx-2 weight-input" value="1" min="0.1" step="0.1" style="width: 80px;" data-item="Cupim - Kg" placeholder="Peso (Kg)">
                         <button class="btn btn-success add-to-cart ml-2" data-item="Cupim - Kg" data-price="85">
                             <i class="fas fa-cart-plus"></i>
+                            <div class="weight-description">Ex: 0,5 (meio quilo) ou 1 (1kg)</div>
                         </button>
                     </div>
                 </li>
@@ -158,21 +132,23 @@
                     </div>
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    🐖 <strong>Costelinha suína - Kg R$ 60,00 </strong> Ex: 0,5 (meio quilo) ou 1 (1kg) 
+                    🐖 <strong>Costelinha suína - Kg R$ 60,00 </strong>
                     <div class="d-flex align-items-center">
                         <input type="number" class="form-control mx-2 weight-input" value="1" min="0.1" step="0.1" style="width: 80px;" data-item="Costelinha suína - Kg" placeholder="Peso (Kg)">
                         <button class="btn btn-success add-to-cart ml-2" data-item="Costelinha suína - Kg" data-price="60">
                             <i class="fas fa-cart-plus"></i>
                         </button>
+                        <div class="weight-description">Ex: 0,5 (meio quilo) ou 1 (1kg)</div>
                     </div>
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    🐷 <strong>Pernil suíno - Kg R$ 60,00 </strong> Ex: 0,5 (meio quilo) ou 1 (1kg) 
+                    🐷 <strong>Pernil suíno - Kg R$ 60,00 </strong> 
                     <div class="d-flex align-items-center">
                         <input type="number" class="form-control mx-2 weight-input" value="1" min="0.1" step="0.1" style="width: 80px;" data-item="Pernil suíno - Kg" placeholder="Peso (Kg)">
                         <button class="btn btn-success add-to-cart ml-2" data-item="Pernil suíno - Kg" data-price="60">
                             <i class="fas fa-cart-plus"></i>
                         </button>
+                        <div class="weight-description">Ex: 0,5 (meio quilo) ou 1 (1kg)</div>
                     </div>
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -198,7 +174,7 @@
                     </div>
                 </li>
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    🥗 <strong>Maionese - 500g R$ 18,00 </strong> Ex: 1 (500g) - 2 (1Kg)
+                    🥗 <strong>Maionese - 500g R$ 18,00 </strong>
                     <div class="d-flex align-items-center">
                         <button class="btn btn-outline-secondary btn-sm quantity-decrease" data-item="Maionese - 500g">-</button>
                         <input type="number" class="form-control mx-2 quantity-input" value="1" min="1" style="width: 60px;" data-item="Maionese - 500g">
@@ -206,6 +182,7 @@
                         <button class="btn btn-success add-to-cart ml-2" data-item="Maionese - 500g" data-price="18">
                             <i class="fas fa-cart-plus"></i>
                         </button>
+                        <div class="weight-description">Ex: 1 (meio quilo) ou 2 (1kg)</div>
                     </div>
                 </li>
             </ul>
